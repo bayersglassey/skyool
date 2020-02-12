@@ -52,9 +52,23 @@ class Database(SimpleNamespace):
         self.tables = OrderedDict()
         if table_defns is not None:
             for defn in table_defns:
-                self.tables[defn.name] = Table(defn)
+                self.create(table_defn)
+
+    def create(self, defn: TableDefn):
+        assert defn.name not in self.tables
+        self.tables[defn.name] = Table(defn)
+
+    def drop(self, table_name):
+        del self.tables[table_name]
 
     def check(self):
         for table in self.tables.values():
             table.check()
 
+    def execute(self, *cmds):
+        results = []
+        for cmd in cmds:
+            result = cmd.run(self)
+            if result is not None:
+                results.append(result)
+        return results
