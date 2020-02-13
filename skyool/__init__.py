@@ -6,8 +6,9 @@ from skyool.syntax import (
 )
 from skyool.expr import (
     Expr,
-    Neg, Inv, Not,
-    Add, Sub, Mul, Div, Mod,
+    Val, Col,
+    Neg, Inv, Not, Len,
+    In, Add, Sub, Mul, Div, Mod,
     Eq, Ne, Lt, Gt, Le, Ge,
     And, Or,
 )

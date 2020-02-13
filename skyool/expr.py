@@ -1,17 +1,28 @@
-from typing import NamedTuple, Sequence, Optional
+from typing import NamedTuple, Sequence, Optional, Any
 
 
 class Expr:
-    def eval(self, db, row):
+    def eval(self, table, row):
         raise NotImplementedError("Implement me!")
+
+class Val(Expr, NamedTuple):
+    value: Any
+    def eval(self, table, row):
+        return self.value
+
+class Col(Expr, NamedTuple):
+    name: str
+    def eval(self, table, row):
+        col_ind = table.get_col_ind(self.name)
+        return row[col_ind]
 
 
 class Unop(Expr, NamedTuple):
     x: Expr
     def op(self, xval):
         raise NotImplementedError("Implement me!")
-    def eval(self, db, row):
-        xval = self.x.run(db, row)
+    def eval(self, table, row):
+        xval = self.x.eval(table, row)
         return self.op(xval)
 
 class Neg(Unop):
@@ -26,16 +37,24 @@ class Not(Unop):
     def op(self, xval):
         return not xval
 
+class Len(Unop):
+    def op(self, xval):
+        return len(xval)
+
 
 class Binop(Expr, NamedTuple):
     x: Expr
     y: Expr
     def op(self, xval, yval):
         raise NotImplementedError("Implement me!")
-    def eval(self, db, row):
-        xval = self.x.run(db, row)
-        yval = self.y.run(db, row)
+    def eval(self, table, row):
+        xval = self.x.eval(table, row)
+        yval = self.y.eval(table, row)
         return self.op(xval, yval)
+
+class In(Binop):
+    def op(self, xval, yval):
+        return xval in yval
 
 class Add(Binop):
     def op(self, xval, yval):

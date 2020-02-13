@@ -24,9 +24,9 @@ class Table(SimpleNamespace):
     defn: TableDefn
     rows: Sequence[Row]
 
-    def __init__(self, defn: TableDefn):
+    def __init__(self, defn: TableDefn, rows: Sequence[Row] = None):
         self.defn = defn
-        self.rows = []
+        self.rows = [] if rows is None else rows
         self.col_names = tuple(col_defn.name for col_defn in defn.cols)
 
     def check(self):
@@ -38,6 +38,16 @@ class Table(SimpleNamespace):
         for row in rows:
             assert len(row) == len(self.defn.cols)
             self.rows.append(row)
+
+    def get_col_ind(self, col_name):
+        """Returns index of given column name"""
+        return self.col_names.index(col_name)
+
+    def get_col_inds(self, col_names=None):
+        """Returns tuple of column indices given sequence of column names"""
+        if col_names is None:
+            col_names = self.col_names
+        return tuple(self.col_names.index(col_name) for col_name in col_names)
 
 
 class Database(SimpleNamespace):
@@ -66,9 +76,9 @@ class Database(SimpleNamespace):
             table.check()
 
     def execute(self, *cmds):
-        rowsets = []
+        tables = []
         for cmd in cmds:
-            result = cmd.run(self)
-            if result is not None:
-                rowsets.append(result)
-        return rowsets
+            table = cmd.run(self)
+            if table is not None:
+                tables.append(table)
+        return tables

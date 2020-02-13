@@ -17,12 +17,21 @@ In a fresh virtualenv:
 
 Then, in a Python shell:
 
-    from skyool import Database, Create, Insert, Select, Drop
+    from skyool import (
+        # This is important
+        Database,
+
+        # SQL commands
+        Create, Insert, Select, Drop,
+
+        # Expressions
+        Val, Col, Len, In, Gt,
+    )
 
 
     db = Database("example")
 
-    rowsets = db.execute(
+    result_tables = db.execute(
         Create("people", [
             ("name", str),
             ("age", int),
@@ -34,20 +43,19 @@ Then, in a Python shell:
             ("Ricky F", 32, "grape"),
         ]),
         Select("people", ["name", "fave_fruit"]),
-        Select("people", ["age"]),
-        Select("people", ["age", "name"]),
+        Select("people", ["age"], In(Val("pea"), Col("fave_fruit"))),
+        Select("people", ["age", "name"], Gt(Len(Col("name")), Val(3))),
         Drop("people"),
     )
 
-    assert rowsets == [
+    assert [table.rows for table in result_tables] == [
         [
             ("Joe", "pear"),
             ("Mack", "peach"),
             ("Ricky F", "grape"),
         ],
-        [(12,), (45,), (32,)],
+        [(12,), (45,)],
         [
-            (12, "Joe"),
             (45, "Mack"),
             (32, "Ricky F"),
         ],
