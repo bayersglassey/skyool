@@ -66,9 +66,9 @@ class Database(SimpleNamespace):
             table.check()
 
     def execute(self, *cmds):
-        results = []
+        rowsets = []
         for cmd in cmds:
             result = cmd.run(self)
             if result is not None:
-                results.append(result)
-        return results
+                rowsets.append(result)
+        return rowsets

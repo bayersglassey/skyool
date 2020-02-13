@@ -17,13 +17,12 @@ In a fresh virtualenv:
 
 Then, in a Python shell:
 
-    from skyool.database import Database
-    from skyool.syntax import Create, Insert, Select, Drop
+    from skyool import Database, Create, Insert, Select, Drop
 
 
     db = Database("example")
 
-    results = db.execute(
+    rowsets = db.execute(
         Create("people", [
             ("name", str),
             ("age", int),
@@ -40,7 +39,7 @@ Then, in a Python shell:
         Drop("people"),
     )
 
-    assert results == [
+    assert rowsets == [
         [
             ("Joe", "pear"),
             ("Mack", "peach"),

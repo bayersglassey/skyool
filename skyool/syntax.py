@@ -1,10 +1,9 @@
 from typing import NamedTuple, Sequence, Tuple, Optional
 
 from skyool.database import Row, ColDefn, TableDefn, Type
+from skyool.expr import Expr
 
 
-class Expr(NamedTuple):
-    pass
 
 class Select(NamedTuple):
 
