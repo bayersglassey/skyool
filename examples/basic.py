@@ -1,11 +1,10 @@
 
-from skyool.database import *
-from skyool.syntax import *
+from skyool import *
 
 
 db = Database("example")
 
-results = db.execute(
+rowsets = db.execute(
     Create("people", [
         ("name", str),
         ("age", int),
@@ -22,7 +21,7 @@ results = db.execute(
     Drop("people"),
 )
 
-assert results == [
+assert rowsets == [
     [
         ("Joe", "pear"),
         ("Mack", "peach"),
