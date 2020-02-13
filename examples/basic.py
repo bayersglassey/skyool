@@ -21,6 +21,10 @@ result_tables = db.execute(
     Drop("people"),
 )
 
+for table in result_tables:
+    table.show()
+    print()
+
 assert [table.rows for table in result_tables] == [
     [
         ("Joe", "pear"),

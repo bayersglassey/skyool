@@ -48,6 +48,34 @@ Then, in a Python shell:
         Drop("people"),
     )
 
+    for table in result_tables:
+        table.show()
+        print()
+
+    # Prints:
+    #
+    # +-------+----------+
+    # |   name|fave_fruit|
+    # +-------+----------+
+    # |    Joe|      pear|
+    # |   Mack|     peach|
+    # |Ricky F|     grape|
+    # +-------+----------+
+    #
+    # +---+
+    # |age|
+    # +---+
+    # | 12|
+    # | 45|
+    # +---+
+    #
+    # +---+-------+
+    # |age|   name|
+    # +---+-------+
+    # | 45|   Mack|
+    # | 32|Ricky F|
+    # +---+-------+
+
     assert [table.rows for table in result_tables] == [
         [
             ("Joe", "pear"),

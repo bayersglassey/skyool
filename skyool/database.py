@@ -49,6 +49,37 @@ class Table(SimpleNamespace):
             col_names = self.col_names
         return tuple(self.col_names.index(col_name) for col_name in col_names)
 
+    def show(self):
+        """Prints human-readable table and returns None"""
+        n_cols = len(self.col_names)
+        rowstrs = [[str(val) for val in row] for row in self.rows]
+
+        # Figure out printed column widths
+        # (Just max width of all values we'll need to print in each column,
+        # including column names)
+        col_widths = [2] * n_cols
+        for row in [self.col_names] + rowstrs:
+            for i in range(n_cols):
+                width = len(row[i])
+                col_widths[i] = max(col_widths[i], width)
+
+        # Define solid lines and lines showing values
+        bars = ["-" * col_widths[i] for i in range(n_cols)]
+        solid_line = "+" + "+".join(bars) + "+"
+        def get_line(rowstr):
+            padded_values = [
+                val.rjust(col_widths[i])
+                for i, val in enumerate(rowstr)]
+            return "|" + "|".join(padded_values) + "|"
+
+        # Actually print stuff
+        print(solid_line)
+        print(get_line(self.col_names))
+        print(solid_line)
+        for rowstrs in rowstrs:
+            print(get_line(rowstrs))
+        print(solid_line)
+
 
 class Database(SimpleNamespace):
 
