@@ -1,5 +1,5 @@
 decorator==4.4.1
-ipython==4.2.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 pexpect==4.8.0
 pickleshare==0.7.5
